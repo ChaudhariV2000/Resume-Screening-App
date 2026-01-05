@@ -23,12 +23,14 @@ def download_if_missing():
     for filename, url in files.items():
         if not os.path.exists(filename):
             gdown.download(url, filename, quiet=False)
-download_if_missing()
-# Load pre-trained model and TF-IDF vectorizer (ensure these are saved earlier)
-svc_model = pickle.load(open('clf.pkl', 'rb'))  # Example file name, adjust as needed
-tfidf = pickle.load(open('tfidf.pkl', 'rb'))  # Example file name, adjust as needed
-le = pickle.load(open('encoder.pkl', 'rb'))  # Example file name, adjust as needed
-
+@st.cache_resource
+def load_models():
+    download_if_missing()
+    svc_model = pickle.load(open('clf.pkl', 'rb'))
+    tfidf = pickle.load(open('tfidf.pkl', 'rb'))
+    le = pickle.load(open('encoder.pkl', 'rb'))
+    return svc_model, tfidf, le
+svc_model, tfidf, le = load_models()
 
 # Function to clean resume text
 def cleanResume(txt):

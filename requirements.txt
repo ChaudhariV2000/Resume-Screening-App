@@ -4,5 +4,4 @@ python-docx
 PyPDF2
 numpy
 pandas
-os
 gdown

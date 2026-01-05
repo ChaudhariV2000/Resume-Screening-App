@@ -10,7 +10,20 @@ import pickle
 import docx  # Extract text from Word file
 import PyPDF2  # Extract text from PDF
 import re
+import os
+import gdown
 
+def download_if_missing():
+    files = {
+        "clf.pkl": "https://drive.google.com/uc?id=1m5-TYeJB-JOicIeG-9XClmFb3C1gYhsO",
+        "encoder.pkl": "https://drive.google.com/uc?id=1NrwY6zLqVywLvE7DmY_kU0W2HCWadw3U",
+        "tfidf.pkl": "https://drive.google.com/uc?id=1hy3ytxPSBH9fn8ifcRY8tbokWnilWaY2"
+    }
+
+    for filename, url in files.items():
+        if not os.path.exists(filename):
+            gdown.download(url, filename, quiet=False)
+download_if_missing()
 # Load pre-trained model and TF-IDF vectorizer (ensure these are saved earlier)
 svc_model = pickle.load(open('clf.pkl', 'rb'))  # Example file name, adjust as needed
 tfidf = pickle.load(open('tfidf.pkl', 'rb'))  # Example file name, adjust as needed
@@ -95,6 +108,7 @@ def pred(input_resume):
 
 # Streamlit app layout
 def main():
+
     st.set_page_config(page_title="Resume Category Prediction", page_icon="📄", layout="wide")
 
     st.title("Resume Category Prediction App")
